@@ -1,0 +1,15 @@
+﻿@model IEnumerable<WMAgility2.Component.AdminMenuItem>
+
+<li class="dropdown">
+    <a asp-controller="Admin"
+       asp-action="Index"
+       class="dropdown" data-toggle="dropdown">Admin<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        @foreach (var menuItem in Model)
+        {
+            <li>
+                <a asp-controller="Admin" asp-action=@menuItem.ActionValue>@menuItem.DisplayValue</a>
+            </li>
+        }
+    </ul>
+</li>

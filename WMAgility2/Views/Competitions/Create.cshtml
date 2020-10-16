@@ -1,0 +1,97 @@
+﻿@model WMAgility2.Models.ViewModels.CompetitionFaultViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Competition</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="DogId" class="control-label"></label>
+                <select asp-for="DogId" class="form-control" asp-items="ViewBag.DogId"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CompName" class="control-label"></label>
+                <input asp-for="CompName" class="form-control" />
+                <span asp-validation-for="CompName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Length" class="control-label"></label>
+                <input asp-for="Length" class="form-control" />
+                <span asp-validation-for="Length" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Surface" class="control-label"></label>
+                <select asp-for="Surface" asp-items="Html.GetEnumSelectList<Surface>()">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+                <span asp-validation-for="Surface" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Placement" class="control-label"></label>
+                <select asp-for="Placement" asp-items="Html.GetEnumSelectList<Placement>()">
+                    <option selected="selected" value="">Please select</option>
+                </select>
+                <span asp-validation-for="Placement" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AllFaults" class="control-label"></label>
+                <table>
+                    @for (int i = 0; i < Model.AllFaults.Capacity; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(x => Model.AllFaults[i].Id)
+                                @Html.DisplayFor(it => Model.AllFaults[i].Name)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(it => Model.AllFaults[i].IsChecked, new { @checked = true })
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                <input asp-for="Notes" class="form-control" />
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

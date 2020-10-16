@@ -1,0 +1,111 @@
+﻿@model WMAgility2.Models.ViewModels.SkillViewModel
+
+@{
+    var title = "Create Skill";
+}
+
+<form method="post" enctype="multipart/form-data">
+    @if (Model.Skill.Id != 0)
+    {
+        title = "Edit Skill";
+        <input asp-for="Skill.Id" hidden />
+    }
+
+    <div class="border p-3">
+
+        <div class="form-group row">
+            <h2 class=" text-info p1-3"> @title</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Skill.Name"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Skill.Name" class="form-control" />
+                        <span asp-validation-for="Skill.Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Skill.Description"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Skill.Description" class="form-control" />
+                        <span asp-validation-for="Skill.Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Skill.IKC"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Skill.IKC" class="form-control" />
+                        <span asp-validation-for="Skill.IKC" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        Image
+                    </div>
+                    <div class="col-8">
+                        <input type="file" name="files" id="uploadBox" asp-for="Skill.Image" multiple class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+                        <div class="col">
+                            @if (Model.Skill.Id != 0)
+                            {
+                                //update
+                                <input type="submit" class="btn btn-info w-100" value="Update" />
+                            }
+                            else
+                            {
+                                //create
+                                <input type="submit" onclick="return validateInput()" class="btn btn-info w-100" value="Create" />
+                            }
+                        </div>
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success w-100">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            @if (Model.Skill.Id != 0)
+            {
+                <img src="@WebConstants.ImagePath@Model.Skill.Image" width="100" style="border-radius: 5px; border:1px solid #bbb;" />
+
+            }
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+    function validateInput() {
+        if (document.getElementById("uploadBox").value == "") {
+            Swal.fire(
+                'Error',
+                'Please upload an image',
+                'error'
+            )
+            return false;
+        }
+        return true;
+    }
+    </script>
+}
+

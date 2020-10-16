@@ -1,0 +1,63 @@
+﻿@model IEnumerable<WMAgility2.Models.Dog>
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Dogs List</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a asp-controller="Dogs" asp-action="UpDog" class="btn btn-primary">
+                Create New Dog
+            </a>
+        </div>
+    </div>
+
+    <br /> <br />
+
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style=" width: 100%">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Breed
+                    </th>
+                    <th>
+                        Date Of Birth
+                    </th>
+                    <th>
+                        Image
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in Model)
+                {
+                    <tr>
+                        <td width="50%">@obj.DogName</td>
+                        <td width="50%">@obj.Breed</td>
+                        <td width="50%">@obj.DOB.ToShortDateString()</td>
+                        <td width="50%">
+                            <img src="@WebConstants.ImagePath@obj.Image" width="100" style="border-radius: 5px; border:1px solid #bbb;" />
+                        </td>
+                        <td class="text-center">
+                            <div class="w-75 btn-group" role="group">
+                                <a asp-controller="Dogs" asp-action="UpDog" asp-route-Id="@obj.Id" class="btn btn-primary mx-2">Edit</a>
+                                <a asp-controller="Dogs" asp-action="Delete" asp-route-Id="@obj.Id" class="btn btn-danger mx-2">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p> No Dog Exists.</p>
+    }
+
+</div>

@@ -1,0 +1,11 @@
+﻿@model WMAgility2.Models.ViewModels.HomeViewModel
+
+<div class="container">
+    <div class="row">
+        @foreach (var skill in Model.Skills)
+        {
+            //display all skills
+            <partial name="_SkillCard" model="skill" />
+        }
+    </div>
+</div>
