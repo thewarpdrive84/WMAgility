@@ -122,6 +122,7 @@ namespace WMAgility2.Controllers
                         }
 
                         dogViewModel.Dog.Image = fileName + extension;
+                        dogViewModel.Dog.ApplicationUserId = userId;
                     }
                     else
                     {

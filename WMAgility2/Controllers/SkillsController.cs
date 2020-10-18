@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WMAgility2.Data;
 using WMAgility2.Models;
 using WMAgility2.Models.ViewModels;
+using WMAgility2.Utilities;
 
 namespace WMAgility2.Controllers
 {
@@ -18,12 +20,14 @@ namespace WMAgility2.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ISkillRepository _skillRepository;
+        private readonly ILogger _logger;
 
-        public SkillsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, ISkillRepository skillRepository)
+        public SkillsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, ISkillRepository skillRepository, ILogger logger)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
             _skillRepository = skillRepository;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -212,6 +216,36 @@ namespace WMAgility2.Controllers
             {
                 Skill = _skillRepository.AllSkills
             });
+        }
+
+        public IActionResult Details(int id)
+        {
+            var skill = _skillRepository.GetSkillById(id);
+            if (skill == null)
+            {
+                _logger.LogDebug(LogEventIds.GetSkillIdNotFound, 
+                    new Exception("Skill not found"), "Skill with id {0} not found", id);
+                //return NotFound();
+                //Catch this error using the exception filter
+                throw new SkillNotFoundException();
+            }
+
+            return View(new SkillViewModel() { Skill = skill });
+        }
+
+        [Route("[controller]/Details/{id}")]
+        [HttpPost]
+        public IActionResult DetailsPost(int id)
+        {
+            var skill = _skillRepository.GetSkillById(id);
+            if (skill == null)
+            {
+                _logger.LogWarning(LogEventIds.GetSkillIdNotFound, 
+                    new Exception("Skill not found"), "Skill with id {0} not found", id);
+                return NotFound();
+            }
+
+            return View(new SkillViewModel() { Skill = skill });
         }
     }
 }

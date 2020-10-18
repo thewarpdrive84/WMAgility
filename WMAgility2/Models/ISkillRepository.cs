@@ -8,6 +8,8 @@ namespace WMAgility2.Models
     public interface ISkillRepository
     {
         IEnumerable<Skill> AllSkills { get; }
+        Skill GetSkillById(int Id);
+        //void UpSkill(Skill skill);
 
         //Unit Testing
         Skill CreateSkill(Skill skill);
