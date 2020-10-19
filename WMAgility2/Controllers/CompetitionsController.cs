@@ -36,17 +36,26 @@ namespace WMAgility2.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
             var item = _db.Faults.ToList();
-            CompetitionFaultViewModel m1 = new CompetitionFaultViewModel();
+            CompetitionFaultViewModel m1 = new CompetitionFaultViewModel()
+            {
+                AvailableDogs = _db.Dogs.Where(d => d.ApplicationUserId == currentUser.Id)
+                .ToDictionary(x => x.Id, x => $"{ x.Id }({ x.DogName })")
+            };
             m1.AllFaults = item.Select(vm => new CheckBoxItem()
             {
                 Id = vm.Id,
                 Name = vm.Name,
                 IsChecked = false
             }).ToList();
+
             return View(m1);
+
         }
 
         [HttpPost]
@@ -54,6 +63,7 @@ namespace WMAgility2.Controllers
         {
             var userId = _userManager.GetUserId(User);
             var user = await _userManager.FindByIdAsync(userId);
+            var currentUser = await _userManager.GetUserAsync(User);
 
             List<CompFault> compFaults = new List<CompFault>();
             competition.CompName = cfvm.CompName;
@@ -63,6 +73,8 @@ namespace WMAgility2.Controllers
             competition.Surface = (Surface)cfvm.Surface;
             competition.Placement = (Placement)cfvm.Placement;
             competition.Notes = cfvm.Notes;
+            competition.ApplicationUserId = userId; //check
+            competition.DogId = cfvm.DogId;
             _db.Competitions.Add(competition);
             _db.SaveChanges();
             int compId = competition.CompId;
@@ -74,11 +86,13 @@ namespace WMAgility2.Controllers
                     compFaults.Add(new CompFault() { CompId = compId, FaultId = item.Id });
                 }
             }
-
             foreach (var item in compFaults)
             {
                 _db.CompFaults.Add(item);
             }
+
+            cfvm.AvailableDogs = _db.Dogs.Where(d => d.ApplicationUserId == currentUser.Id)
+                .ToDictionary(x => x.Id, x => $"{ x.Id }({ x.DogName })");
 
             _db.SaveChanges();
             return RedirectToAction("Index", "Competitions");

@@ -3,6 +3,16 @@
     ViewData["Title"] = "Create";
 }
 
+@{
+    var availableDogsSelectListItems = Model.AvailableDogs
+        .Select(x => new SelectListItem
+        {
+            Text = x.Value.ToString(),
+            Value = x.Key.ToString()
+        });
+}
+
+
 <h1>Create</h1>
 
 <h4>Competition</h4>
@@ -14,7 +24,11 @@
 
             <div class="form-group">
                 <label asp-for="DogId" class="control-label"></label>
-                <select asp-for="DogId" class="form-control" asp-items="ViewBag.DogId"></select>
+                <select class="form-control" asp-for="DogId"
+                        asp-items="availableDogsSelectListItems">
+                    <option value="">- select -</option>
+                </select>
+                <span class="form-text" asp-validation-for="DogId"></span>
             </div>
 
             <div class="form-group">
@@ -31,7 +45,7 @@
 
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" class="form-control" value="@DateTime.Today.ToString("dd-MM-yyyy")"/>
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
 

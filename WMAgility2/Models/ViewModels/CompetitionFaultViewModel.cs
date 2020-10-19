@@ -31,6 +31,7 @@ namespace WMAgility2.Models.ViewModels
 
         public int DogId { get; set; }
         public Dog Dog { get; set; }
+        public IDictionary<int, string> AvailableDogs { get; set; }
 
         [Display(Name ="Faults")]
         public List<CheckBoxItem> AllFaults { get; set; }
