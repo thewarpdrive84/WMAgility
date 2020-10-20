@@ -1,0 +1,69 @@
+﻿@model WMAgility2.Models.ViewModels.PracticeViewModel
+
+@{
+    var availableDogsSelectListItems = Model.AvailableDogs
+        .Select(x => new SelectListItem
+        {
+            Text = x.Value.ToString(),
+            Value = x.Key.ToString()
+        });
+}
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Practice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="DogId" class="control-label"></label>
+                <select class="form-control" asp-for="DogId"
+                        asp-items="availableDogsSelectListItems">
+                    <option value="">- select -</option>
+                </select>
+                <span class="form-text" asp-validation-for="DogId"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" value="@DateTime.Today.ToString("dd-MM-yyyy")"/>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rounds" class="control-label"></label>
+                <input asp-for="Rounds" class="form-control" />
+                <span asp-validation-for="Rounds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Score" class="control-label"></label>
+                <input asp-for="Score" class="form-control" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                <input asp-for="Notes" class="form-control" />
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

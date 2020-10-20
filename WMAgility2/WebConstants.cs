@@ -11,7 +11,7 @@ namespace WMAgility2
         public static string SessionTrack = "TrackingSession";
 
         public static string SuperAdminRole = "Super Admin";
-        public static string AdminRole = "Team Admin";
+        public static string AdminRole = "Admin";
         public static string MemberRole = "Member";
     }
 }

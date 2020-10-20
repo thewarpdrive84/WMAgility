@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Competition>
+
+<li class="dropdown">
+    <a asp-controller="Competitions"
+       asp-action="Index"
+       class="dropdown" data-toggle="dropdown">Competitions<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        @foreach (var comp in Model)
+        {
+            <li>
+                <a asp-controller="Competitions" asp-action="CompList"
+                   asp-route-id="@comp.CompId">@comp.CompName</a>
+            </li>
+        }
+        <li class="divider"></li>
+        <li>
+            <a asp-controller="Competitions" asp-action="Index" asp-route-Category="">All Competitions</a>
+        </li>
+    </ul>
+</li>

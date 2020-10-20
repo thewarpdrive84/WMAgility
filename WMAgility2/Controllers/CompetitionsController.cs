@@ -18,11 +18,13 @@ namespace WMAgility2.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IDogRepository _dogRepository;
+        private readonly ICompRepository _compRepository;
         private readonly UserManager<IdentityUser> _userManager;
-        public CompetitionsController(ApplicationDbContext db, IDogRepository dogRepository, UserManager<IdentityUser> userManager)
+        public CompetitionsController(ApplicationDbContext db, IDogRepository dogRepository, ICompRepository compRepository, UserManager<IdentityUser> userManager)
         {
             _db = db;
             _dogRepository = dogRepository;
+            _compRepository = compRepository;
             _userManager = userManager;
         }
         public async Task<IActionResult> IndexAsync()
@@ -96,6 +98,33 @@ namespace WMAgility2.Controllers
 
             _db.SaveChanges();
             return RedirectToAction("Index", "Competitions");
+        }
+
+        [Authorize(Roles = "Super Admin, Team Admin, Member")]
+        public ViewResult CompList(int? id)
+        {
+            IEnumerable<Competition> comp;
+            string currentComp;
+            int compId;
+
+            if (id == null)
+            {
+                comp = _compRepository.AllComps.OrderBy(s => s.CompId);
+                currentComp = "All Competitions";
+                compId = 1;
+            }
+            else
+            {
+                comp = _compRepository.AllComps.Where(s => s.CompId == id)
+                    .OrderBy(s => s.CompId);
+                currentComp = _compRepository.AllComps.FirstOrDefault(c => c.CompId == id)?.CompName;
+                compId = id.Value;
+            }
+            ViewData["CompAmount"] = comp.Count();
+            return View(new CompListViewModel
+            {
+                Competition = _compRepository.AllComps
+            });
         }
 
         //// GET: Competitions/Details/5

@@ -19,29 +19,29 @@ namespace WMAgility2.Models
         public int CompId { get; set; }
 
         [Required(ErrorMessage = "The Competition Name field is required")]
-        [Display(Name = "Competition Name:")]
+        [Display(Name = "Competition Name")]
         public string CompName { get; set; }
 
         [Required(ErrorMessage = "The Location field is required")]
-        [Display(Name = "Location:")]
+        [Display(Name = "Location")]
         public string Location { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Date { get; set; }
 
-        [Display(Name = "Course Length:")]
+        [Display(Name = "Course Length")]
         public string Length { get; set; }
 
         [EnumDataType(typeof(Surface))]
-        [Display(Name = "Surface:")]
+        [Display(Name = "Surface")]
         public Surface Surface { get; set; }
 
-        [Display(Name = "Placement:")]
+        [Display(Name = "Placement")]
         [EnumDataType(typeof(Placement))]
         public Placement Placement { get; set; }
 
-        [Display(Name = "Notes:")]
+        [Display(Name = "Notes")]
         public string Notes { get; set; }
 
         public string ApplicationUserId { get; set; }

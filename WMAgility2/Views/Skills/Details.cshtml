@@ -9,7 +9,7 @@
                         <h1 class="text-white">@Model.Skill.Name</h1>
                     </div>
                     <div class="col-12 col-md-6 text-md-right">
-                        <h1 class="text-dark"> @Model.Skill.Description</h1>
+                        <h1 class="text-white"> @Model.Skill.Description</h1>
                     </div>
                 </div>
                 <div class="card-body">
@@ -23,10 +23,9 @@
 
                                     <div class="col-12">
                                         <span class="badge p-3 border" style="background-color:lavenderblush">@Model.Skill.Name</span>
-                                        @*<span class="badge p-3 border" style="background-color:azure">@Model.Skill.Dog.DogName</span>*@
                                         <h3 class="text-success"></h3>
 
-                                        <p class="text-secondary">@Html.Raw(Model.Skill.Name) &nbsp;To be expanded with Irish Kennel Club specifications</p>
+                                        <p class="text-secondary">@Html.Raw(Model.Skill.Name) &nbsp;@Html.Raw(Model.Skill.IKC)</p>
                                     </div>
 
                                 </div>

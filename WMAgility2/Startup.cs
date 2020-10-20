@@ -44,6 +44,7 @@ namespace WMAgility2
 
             services.AddScoped<IDogRepository, DogRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<ICompRepository, CompRepository>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

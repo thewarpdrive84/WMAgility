@@ -1,17 +1,17 @@
 ﻿@model WMAgility2.Models.Skill
 
 <!-- Card-->
-    <div class="card bg-white rounded shadow-sm" style="width: 20rem; border: 10px solid #be00c6">
+    <div class="card bg-white rounded shadow-sm" style="width: 20rem; border: 10px solid #5f0071">
         <div class="card-body px-3 pt-3 pb-1 row">
-            <div class="col-7"><label class="float-left">@Model.Description</label></div>
-            <div class="col-5"><label class="float-right"><span class="text-info h3">@Model.Name</span></label> </div>
+            <div class="col-6"><label class="float-left">@Model.Description</label></div>
+            <div class="col-6"><label class="float-right"><span class="text-info h3">@Model.Name</span></label> </div>
         </div>
         <img class="card-img-top img-fluid d-block mx-auto mb-3" src="@WebConstants.ImagePath@Model.Image" alt="Card image cap">
         <div class="card-body p-1 px-3 row">
             <div class="col-12 p-1">
                 <a asp-controller="Skills" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary form-control btn-sm p-2" style="height:40px">View Skill</a>
                 &nbsp;
-                <a asp-action="Practice" asp-route-id="@Model.Id" class="btn btn-primary form-control btn-sm p-2" style="height:40px">Practice Skill</a>
+                <a asp-controller="Practices" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary form-control btn-sm p-2" style="height:40px">Practice Skill</a>
             </div>
         </div>
     </div>

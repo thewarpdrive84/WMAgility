@@ -13,9 +13,14 @@ a {
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fba1a1;
+    background-color: #ca0075;
+    border-color: #ca0075;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+    background-color: #fba1a1 !important;
+    border-color: #ca0075 !important;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -61,6 +66,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  background-color: darksalmon;
 }
 .footer {
   position: absolute;
@@ -71,7 +77,5 @@ body {
 }
 
 
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
-    background-color: #fba1a1 !important;
-    border-color: #ca0075 !important;
-}
+
+
