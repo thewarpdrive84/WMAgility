@@ -27,30 +27,32 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            @await Component.InvokeAsync("SkillMenu")
-
-                            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") && User.IsInRole("Super Admin"))
-                            {
-                                @await Component.InvokeAsync("AdminMenu")
-                            <li class="dropdown">
-                                <a asp-controller="Admin"
-                                   asp-action="Index">Admin Management</a>
-                            </li>
-                            @await Component.InvokeAsync("DogMenu")
-                            @await Component.InvokeAsync("CompMenu")
-                        }
-                        else if (SignInManager.IsSignedIn(User) && User.IsInRole("Member"))
+                        @if (User.IsInRole("Super Admin"))
                         {
-                            @await Component.InvokeAsync("DogMenu")
-                            @await Component.InvokeAsync("CompMenu")
-
-
+                            <li class="nav-item dropdown text-white-50">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Content Management
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+                                    <a class="dropdown-item" asp-action="RoleManagement" asp-controller="Admin">Admin</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Skills">Skills</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Faults">Faults</a>
+                                </div>
+                            </li>
                         }
+                    </ul>
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.IsInRole("Super Admin") || User.IsInRole("Admin") || User.IsInRole("Member"))
+                        {
+                            <li class="nav-item">
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Dogs">Dogs</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Practices">Practice</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Competitions">Competition</a>
+                            </li>
+                        }
+                    </ul>
 
-                        </ul>
-                       
+
                     </div>
                 </div>
             </nav>
