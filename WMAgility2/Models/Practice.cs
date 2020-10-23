@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace WMAgility2.Models
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Practice
     {
         [Key]
@@ -17,9 +19,11 @@ namespace WMAgility2.Models
         public DateTime Date { get; set; }
 
         [Display(Name = "Rounds")]
+        [JsonProperty]
         public int Rounds { get; set; }
 
         [Display(Name = "Score")]
+        [JsonProperty]
         public int Score { get; set; }
 
         [Display(Name = "Notes")]
