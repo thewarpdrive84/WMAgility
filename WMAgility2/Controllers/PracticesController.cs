@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WMAgility2.Data;
 using WMAgility2.Models;
 using WMAgility2.Models.ViewModels;
@@ -17,6 +18,9 @@ namespace WMAgility2.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IDogRepository _dogRepository;
         private readonly UserManager<IdentityUser> _userManager;
+
+        JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
+
 
         public PracticesController(ApplicationDbContext db, IDogRepository dogRepository, UserManager<IdentityUser> userManager)
         {
@@ -193,6 +197,13 @@ namespace WMAgility2.Controllers
         private bool PracticeExists(int id)
         {
             return _db.Practices.Any(e => e.PractId == id);
+        }
+
+        //for graph
+        public ActionResult DataFromDataBase()
+        {
+            ViewBag.DataPoints = JsonConvert.SerializeObject(_db.Practices.ToList(), _jsonSetting);
+            return View();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace WMAgility2.Models
 
         [Display(Name = "Rounds")]
         [JsonProperty]
-        public int Rounds { get; set; }
+        public double Rounds { get; set; }
 
         [Display(Name = "Score")]
         [JsonProperty]

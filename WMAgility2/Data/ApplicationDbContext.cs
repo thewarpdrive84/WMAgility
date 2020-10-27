@@ -16,7 +16,7 @@ namespace WMAgility2.Data
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Practice> Practices { get; set; }
         public DbSet<PracticeSkill> PracticeSkills { get; set; }
-        public DbSet<GraphPoint> GraphPoints { get; set; }
+        //public DbSet<GraphPoint> GraphPoints { get; set; }
         public DbSet<Competition> Competitions { get; set; }
         public DbSet<Fault> Faults { get; set; }
         public DbSet<CompFault> CompFaults { get; set; }
