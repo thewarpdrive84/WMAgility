@@ -5,9 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WMAgility2.Data;
 using WMAgility2.Models;
 using WMAgility2.Models.ViewModels;
+using WMAgility2.Services;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace WMAgility2.Controllers
 {
@@ -16,12 +20,16 @@ namespace WMAgility2.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IUserRepository _userRepository;
+        private readonly IMailService _mailService;
         private readonly ApplicationDbContext _context;
 
-        public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+        public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IUserRepository userRepository, IMailService mailService, ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _userRepository = userRepository;
+            _mailService = mailService;
             _context = context;
         }
 
@@ -222,7 +230,6 @@ namespace WMAgility2.Controllers
         }
 
         //Users in roles
-
         public async Task<IActionResult> AddUserToRole(string roleId)
         {
             var role = await _roleManager.FindByIdAsync(roleId);
@@ -304,5 +311,52 @@ namespace WMAgility2.Controllers
 
             return View(userRoleViewModel);
         }
+
+
+        // for sending email
+        public async Task<IActionResult> SendGridEmail(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            ViewData["CurrentUsers"] = _userRepository.Users.FirstOrDefault(c => c.Id == id).NormalizedUserName;
+            return View("SendGridEmail");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendGridEmail(Email email, string id)
+        {
+            ViewData["Message"] = "Notification sent for event";
+            var emailList = _userRepository.Users.Where(e => e.Id == id).Select(i => i.Email);
+            var currentUsers = _userRepository.Users.FirstOrDefault(c => c.Id == id).NormalizedUserName;
+            currentUsers += "Event";
+            email.Subject = currentUsers;
+
+            foreach (var person in emailList)
+            {
+                if (person != null)
+                {
+                    await _mailService.SendEmailAsync(person, email.Subject, email.EventName, email.EventDetails, email.EventLocation, email.EventDate, email.EventTime);
+                }
+            }
+            return View("EmailSent");
+        }
+
+        public IActionResult EmailSent()
+        {
+            return View();
+        }
+        private bool UserExists(string id)
+        {
+            return _context.Users.Any(e => e.Id == id);
+        }
     }
 }
+

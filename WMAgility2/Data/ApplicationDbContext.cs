@@ -24,6 +24,7 @@ namespace WMAgility2.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.Entity<CompFault>().HasKey(f => new { f.CompId, f.FaultId });
 
             builder.Entity<CompFault>()
@@ -39,6 +40,13 @@ namespace WMAgility2.Data
             builder.Entity<ApplicationUser>()
                 .HasIndex(user => user.Email)
                 .IsUnique(true);
+
+            builder.Entity<Email>(em =>
+            {
+                em.HasNoKey();
+            });
         }
+
+        public DbSet<WMAgility2.Models.Email> Email { get; set; }
     }
 }

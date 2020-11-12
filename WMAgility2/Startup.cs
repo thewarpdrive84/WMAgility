@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WMAgility2.Models;
 using Microsoft.Extensions.Logging;
+using WMAgility2.Services;
+using Rotativa.AspNetCore;
 
 namespace WMAgility2
 {
@@ -33,6 +35,8 @@ namespace WMAgility2
             var logger = serviceProvider.GetService<ILogger<Skill>>(); 
             services.AddSingleton(typeof(ILogger), logger);
 
+            services.AddMvc();   //check if needed
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -45,6 +49,9 @@ namespace WMAgility2
             services.AddScoped<IDogRepository, DogRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<ICompRepository, CompRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddTransient<IMailService, SendGridMailService>(); // SendGridMail
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -79,6 +86,8 @@ namespace WMAgility2
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            RotativaConfiguration.Setup((Microsoft.AspNetCore.Hosting.IHostingEnvironment)env);
         }
     }
 }

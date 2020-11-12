@@ -40,4 +40,12 @@ else
 
 <p>
     <a anchor-style="primary" asp-action="AddUser">Add new user</a>
-</p>
+
+        @*@foreach (IdentityUser user in Model)
+        {
+            if (user.Email == Model.Email)
+            {
+                <a asp-controller="Admin" asp-action="sendGridEmail" asp-route-id="@Model.Email">Send Event Alert</a><span>&nbsp; &nbsp;&nbsp; &nbsp;</span>
+            }
+        }*@
+        </p>
