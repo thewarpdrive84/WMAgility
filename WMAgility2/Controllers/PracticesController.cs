@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Rotativa.AspNetCore;
 using WMAgility2.Data;
 using WMAgility2.Models;
 using WMAgility2.Models.ViewModels;
@@ -38,6 +39,22 @@ namespace WMAgility2.Controllers
             var applicationDbContext = _db.Practices.Include(p => p.Dog).Where(r => r.ApplicationUserId == currentUser.Id);
             return View(await applicationDbContext.ToListAsync());
 
+        }
+
+        public ActionResult CalcPercent()
+        {
+            PracticeViewModel pvm = new PracticeViewModel();
+
+            var rounds = _db.Practices.Where(r => r.Rounds > 0).Count(); ;
+            var scores = _db.Practices.Sum(s => s.Score);
+            pvm.Percentage = Math.Round(scores / (rounds * 10) * 100, 2);
+
+            return View(pvm);
+        }
+
+        public IActionResult ReportPDF()
+        {
+            return new ViewAsPdf("ReportPDF");
         }
 
         // GET: Practices/Details/5

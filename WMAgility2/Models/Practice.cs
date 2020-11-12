@@ -24,7 +24,7 @@ namespace WMAgility2.Models
 
         [Display(Name = "Score")]
         [JsonProperty]
-        public int Score { get; set; }
+        public double Score { get; set; }
 
         [Display(Name = "Notes")]
         public string Notes { get; set; }

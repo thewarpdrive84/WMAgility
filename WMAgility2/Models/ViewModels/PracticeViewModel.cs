@@ -12,9 +12,10 @@ namespace WMAgility2.Models.ViewModels
 
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
-        public int Rounds { get; set; }
-        public int Score { get; set; }
+        public double Rounds { get; set; }
+        public double Score { get; set; }
         public string Notes { get; set; }
+        public double Percentage { get; set; }
         public string ApplicationUserId { get; set; }
         public Practice Practice { get; set; }
         public IEnumerable<Practice> Practices { get; set; }
