@@ -217,9 +217,23 @@ namespace WMAgility2.Controllers
         }
 
         //for graph
-        public ActionResult DataFromDataBase()
+        public async Task<IActionResult> DataFromDataBase()
         {
-            ViewBag.DataPoints = JsonConvert.SerializeObject(_db.Practices.ToList(), _jsonSetting);
+            var practiceData = await (from a in _db.Practices.Include("Dog").Include("PracticeSkills")
+                                      join b in _db.Dogs on a.DogId equals b.Id
+                                      select new PracticeViewModel()
+                                      {
+                                          Score = a.Score,
+                                          Rounds = a.Rounds,
+                                          DogName = a.Dog.DogName,
+                                          Date = a.Date,
+                                          Notes = a.Notes,
+                                          DogId = a.DogId,
+                                          PracticeSkill = a.PracticeSkills.FirstOrDefault(),
+                                          SkillName = a.PracticeSkills.FirstOrDefault().Skill.Name
+                                      }).OrderBy(x => x.DogId).ToListAsync();
+
+            ViewBag.DataPoints = JsonConvert.SerializeObject(practiceData, _jsonSetting);
             return View();
         }
     }

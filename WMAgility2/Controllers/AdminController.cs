@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +17,7 @@ using SendGrid.Helpers.Mail;
 
 namespace WMAgility2.Controllers
 {
-    
+
     public class AdminController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -23,14 +25,18 @@ namespace WMAgility2.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IMailService _mailService;
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IUserRepository userRepository, IMailService mailService, ApplicationDbContext context)
+        public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager,
+            IUserRepository userRepository, IMailService mailService, ApplicationDbContext context,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _userRepository = userRepository;
             _mailService = mailService;
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: /<controller>/
@@ -331,11 +337,11 @@ namespace WMAgility2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendGridEmail(Email email, string id)
+        public async Task<IActionResult> SendGridEmail(Email email)
         {
             ViewData["Message"] = "Notification sent for event";
-            var emailList = _userRepository.Users.Where(e => e.Id == id).Select(i => i.Email);
-            var currentUsers = _userRepository.Users.FirstOrDefault(c => c.Id == id).NormalizedUserName;
+            var emailList = _userRepository.Users.Where(e => e.Id == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)).Select(i => i.Email);
+            var currentUsers = _userRepository.Users.FirstOrDefault(c => c.Id == _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)).NormalizedUserName;
             currentUsers += "Event";
             email.Subject = currentUsers;
 
@@ -346,7 +352,9 @@ namespace WMAgility2.Controllers
                     await _mailService.SendEmailAsync(person, email.Subject, email.EventName, email.EventDetails, email.EventLocation, email.EventDate, email.EventTime);
                 }
             }
-            return View("EmailSent");
+
+            return RedirectToAction("SendGridEmail", new { id = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) });
+            //View("EmailSent");
         }
 
         public IActionResult EmailSent()

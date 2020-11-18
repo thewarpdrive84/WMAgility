@@ -35,9 +35,9 @@ namespace WMAgility2.Models
         [ForeignKey("DogId")]
         public virtual Dog Dog { get; set; }
 
-        public int SkillId { get; set; }
-        [ForeignKey("SkillId")]
-        public virtual Skill Skill { get; set; }
+        #region Navigation Properties
+        public virtual ICollection<PracticeSkill> PracticeSkills { get; set; }
+        #endregion
 
     }
 }
