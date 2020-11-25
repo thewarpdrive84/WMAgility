@@ -22,7 +22,6 @@ namespace WMAgility2.Models.ViewModels
         public double Percentage { get; set; }
         public string ApplicationUserId { get; set; }
         public Practice Practice { get; set; }
-        //public IEnumerable<Practice> Practices { get; set; }
         public PracticeSkill PracticeSkill { get; set; }
         public string SkillName { get; set; }
         public int DogId { get; set; }

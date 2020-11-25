@@ -9,8 +9,8 @@ namespace WMAgility2.Models
     public class PracticeSkill
     {
         [Key]
-        public int PractId { get; set; }
-        public Practice Pract { get; set; }
+        public int PracticeId { get; set; }
+        public Practice Practice { get; set; }
         public int SkillId { get; set; }
         public Skill Skill { get; set; }
     }

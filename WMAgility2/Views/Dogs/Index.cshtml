@@ -1,5 +1,13 @@
 ﻿@model IEnumerable<WMAgility2.Models.Dog>
 
+<form method="get" asp-action="Index">
+    <p>
+        <input type="search" placeholder="Enter dog's name..." value="@ViewData["GetDogDetails"]" name="DogSearch"
+               style="width:500px;" />
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </p>
+</form>
+
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">

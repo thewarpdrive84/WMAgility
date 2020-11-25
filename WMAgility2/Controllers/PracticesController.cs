@@ -67,7 +67,7 @@ namespace WMAgility2.Controllers
 
             var practice = await _db.Practices
                 .Include(p => p.Dog)
-                .FirstOrDefaultAsync(m => m.PractId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (practice == null)
             {
                 return NotFound();
@@ -86,9 +86,9 @@ namespace WMAgility2.Controllers
             {
                 AvailableDogs = _db.Dogs.Where(d => d.ApplicationUserId == currentUser.Id)
                     .ToDictionary(x => x.Id, x => $"{ x.Id }({ x.DogName })"),
+                AvailableSkills = _db.Skills.ToDictionary(s => s.Id, s => $"{ s.Id }({ s.Name })"),
                 Practice = new Practice()
             };
-            //ViewData["DogId"] = new SelectList(_db.Dogs, "Id", "DogName");
             return View(pvm);
         }
 
@@ -110,21 +110,22 @@ namespace WMAgility2.Controllers
             practice.ApplicationUserId = pvm.ApplicationUserId;
             practice.DogId = pvm.DogId;
 
-            int pracId = practice.PractId;
+            //int pracId = practice.PractId;
 
-            foreach (var item in pvm.AllSkills)
-            {
-                 pracSkills.Add(new PracticeSkill() { PractId = pracId, SkillId = item.Id });
+            //foreach (var item in pvm.AllSkills)
+            //{
+            //     pracSkills.Add(new PracticeSkill() { PractId = pracId, SkillId = item.Id });
                 
-            }
-            foreach (var item in pracSkills)
-            {
-                _db.PracticeSkills.Add(item);
-            }
+            //}
+            //foreach (var item in pracSkills)
+            //{
+            //    _db.PracticeSkills.Add(item);
+            //}
 
             pvm.AvailableDogs = _db.Dogs.Where(d => d.ApplicationUserId == currentUser.Id)
             .ToDictionary(x => x.Id, x => $"{ x.Id }({ x.DogName })");
-               
+            pvm.AvailableSkills = _db.Skills.ToDictionary(s => s.Id, s => $"{ s.Id }({ s.Name })");
+
             _db.Add(practice);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -152,7 +153,7 @@ namespace WMAgility2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PractId,Date,Rounds,Score,Notes,ApplicationUserId,DogId")] Practice practice)
         {
-            if (id != practice.PractId)
+            if (id != practice.Id)
             {
                 return NotFound();
             }
@@ -166,7 +167,7 @@ namespace WMAgility2.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PracticeExists(practice.PractId))
+                    if (!PracticeExists(practice.Id))
                     {
                         return NotFound();
                     }
@@ -191,7 +192,7 @@ namespace WMAgility2.Controllers
 
             var practice = await _db.Practices
                 .Include(p => p.Dog)
-                .FirstOrDefaultAsync(m => m.PractId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (practice == null)
             {
                 return NotFound();
@@ -213,7 +214,7 @@ namespace WMAgility2.Controllers
 
         private bool PracticeExists(int id)
         {
-            return _db.Practices.Any(e => e.PractId == id);
+            return _db.Practices.Any(e => e.Id == id);
         }
 
         //for graph

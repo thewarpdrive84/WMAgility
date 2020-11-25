@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WMAgility2.Data;
 using WMAgility2.Models;
 using WMAgility2.Models.ViewModels;
@@ -35,6 +36,19 @@ namespace WMAgility2.Controllers
             IEnumerable<Competition> compList = _db.Competitions.Where(c => c.ApplicationUserId == currentUser.Id);
 
             return View(compList);
+        }
+
+        //search competitions
+        [HttpGet]
+        public async Task<IActionResult> Index(string CompSearch)
+        {
+            ViewData["GetCompDetails"] = CompSearch;
+            var compquery = from x in _db.Competitions select x;
+            if(!string.IsNullOrEmpty(CompSearch))
+            {
+                compquery = compquery.Where(x => x.CompName.Contains(CompSearch));
+            }
+            return View(await compquery.AsNoTracking().ToListAsync());
         }
 
         [HttpGet]

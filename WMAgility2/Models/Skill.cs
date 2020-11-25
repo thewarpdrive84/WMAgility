@@ -19,5 +19,8 @@ namespace WMAgility2.Models
         [Display(Name ="Irish Kennel Club Specifications")]
         public string IKC { get; set; }
         public string Image { get; set; }
+        #region Navigation Properties
+        public virtual ICollection<PracticeSkill> PracticeSkills { get; set; }
+        #endregion
     }
 }

@@ -41,6 +41,22 @@ namespace WMAgility2.Controllers
             return View(objList);
         }
 
+        //search dogs
+        [HttpGet]
+        public async Task<IActionResult> Index(string DogSearch)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            ViewData["GetDogDetails"] = DogSearch;
+            var dogquery = from x in _db.Dogs.Where(d => d.ApplicationUserId == currentUser.Id) select x;
+            if (!string.IsNullOrEmpty(DogSearch))
+            {
+                dogquery = dogquery.Where(x => x.DogName.Contains(DogSearch));
+            }
+            return View(await dogquery.AsNoTracking().ToListAsync());
+        }
+
         //GET - UpDog
         public IActionResult UpDog(int? id)                 //what's up dog?
         {

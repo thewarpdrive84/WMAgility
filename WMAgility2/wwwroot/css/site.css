@@ -64,7 +64,6 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
   margin-bottom: 60px;
   background-color: darksalmon;
 }
@@ -73,9 +72,29 @@ body {
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 60px; 
 }
 
+.fa {
+    padding: 20px;
+    font-size: 30px;
+    width: 50px;
+    text-align: center;
+    text-decoration: none;
+}
+    .fa:hover {
+        opacity: 0.7;
+    }
 
+/* Facebook */
+.fa-facebook {
+    background: #3B5998;
+    color: white;
+}
+/* Instagram */
+.fa-instagram {
+    background: #ff4dd2;
+    color: white;
+}
 
 

@@ -12,13 +12,13 @@ namespace WMAgility2.Models
     public class Practice
     {
         [Key]
-        public int PractId { get; set; }
+        public int Id { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Date { get; set; }
 
-        [Display(Name = "Rounds")]
+        [Display(Name = "Round")]
         [JsonProperty]
         public double Rounds { get; set; }
 
