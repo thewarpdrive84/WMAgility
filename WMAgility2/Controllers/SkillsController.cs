@@ -15,6 +15,7 @@ using WMAgility2.Utilities;
 
 namespace WMAgility2.Controllers
 {
+
     public class SkillsController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -127,7 +128,7 @@ namespace WMAgility2.Controllers
             }
             return View(skillViewModel);
         }
-        [Authorize(Roles = "Super Admin, Team Admin")]
+        [Authorize(Roles = "Super Admin, Admin")]
         //GET - EDIT
         public IActionResult Edit(int? id)
         {
@@ -143,7 +144,7 @@ namespace WMAgility2.Controllers
 
             return View(obj);
         }
-        [Authorize(Roles = "Super Admin, Team Admin")]
+        [Authorize(Roles = "Super Admin, Admin")]
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -157,7 +158,7 @@ namespace WMAgility2.Controllers
             }
             return View(obj);
         }
-        [Authorize(Roles = "Super Admin, Team Admin")]
+        [Authorize(Roles = "Super Admin, Admin")]
         //GET - DELETE
         public IActionResult Delete(int? id)
         {
@@ -174,7 +175,7 @@ namespace WMAgility2.Controllers
             return View(obj);
         }
 
-        [Authorize(Roles = "Super Admin, Team Admin")]
+        [Authorize(Roles = "Super Admin, Admin")]
         //POST - DELETE
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -191,7 +192,7 @@ namespace WMAgility2.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Super Admin, Team Admin, Member")]
+        [Authorize(Roles = "Super Admin, Admin, Member")]
         public ViewResult SkillsList(int? id)
         {
             IEnumerable<Skill> skill;

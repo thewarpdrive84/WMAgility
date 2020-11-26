@@ -9,7 +9,7 @@ using WMAgility2.Models;
 
 namespace WMAgility2.Controllers
 {
-    [Authorize(Roles = "Super Admin, Team Admin")]
+    [Authorize(Roles = "Super Admin, Admin")]
     public class FaultsController : Controller
     {
         private readonly ApplicationDbContext _db;

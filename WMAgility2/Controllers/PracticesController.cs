@@ -41,6 +41,7 @@ namespace WMAgility2.Controllers
 
         }
 
+        //calculate success rate
         public ActionResult CalcPercent()
         {
             PracticeViewModel pvm = new PracticeViewModel();
@@ -52,6 +53,7 @@ namespace WMAgility2.Controllers
             return View(pvm);
         }
 
+        //output PDF
         public IActionResult ReportPDF()
         {
             return new ViewAsPdf("ReportPDF");

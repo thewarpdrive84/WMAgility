@@ -45,7 +45,7 @@
 
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" value="@DateTime.Today.ToString("dd-MM-yyyy")"/>
+                <input asp-for="Date" class="form-control" value="@DateTime.Today.ToString("dd-MM-yyyy")" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
 
@@ -91,7 +91,7 @@
 
             <div class="form-group">
                 <label asp-for="Notes" class="control-label"></label>
-                <input asp-for="Notes" class="form-control" />
+                <textarea asp-for="Notes" class="form-control summernote"></textarea>
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
 
@@ -108,4 +108,10 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('.summernote').summernote({ height: 200});
+    });
+    </script>
 }
