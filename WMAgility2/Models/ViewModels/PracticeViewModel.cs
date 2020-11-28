@@ -8,11 +8,11 @@ namespace WMAgility2.Models.ViewModels
 {
     public class PracticeViewModel
     {
-        public PracticeViewModel()
-        {
-            PracticeSkill = new PracticeSkill();
-        }
-        public int PracticeId { get; set; }
+        //public PracticeViewModel()
+        //{
+        //    PracticeSkill = new PracticeSkill();
+        //}
+        public int Id { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
@@ -22,14 +22,19 @@ namespace WMAgility2.Models.ViewModels
         public double Percentage { get; set; }
         public string ApplicationUserId { get; set; }
         public Practice Practice { get; set; }
-        public PracticeSkill PracticeSkill { get; set; }
-        public string SkillName { get; set; }
-        public int DogId { get; set; }
+
         public Dog Dog { get; set; }
+        public int DogId { get; set; }
         public string DogName { get; set; }
         public IDictionary<int, string> AvailableDogs { get; set; }
+
+       
         public Skill Skill { get; set; }
+        public int SkillId { get; set; }
+        public string SkillName { get; set; }
         public IDictionary<int, string> AvailableSkills { get; set; }
-        public List<Skill> AllSkills { get; set; }
+
+        //public PracticeSkill PracticeSkill { get; set; }
+        //public List<Skill> AllSkills { get; set; }
     }
 }

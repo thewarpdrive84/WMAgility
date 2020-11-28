@@ -6,9 +6,10 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<a asp-controller="Competitions" asp-action="CompetitionForm" class="btn btn-primary form-control btn-sm p-2" style="width:250px">Download Competition Form</a>
+&nbsp;
+<a asp-action="Create" class="btn btn-primary form-control btn-sm p-2" style="width:250px">Create New</a>
+&nbsp;
 
 <form method="get" asp-action="Index">
     <p>
@@ -52,41 +53,41 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Length)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surface)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Placement)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompFaults)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dog.DogName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CompId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CompId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CompId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Length)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surface)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Placement)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompFaults)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Notes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dog.DogName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CompId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CompId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

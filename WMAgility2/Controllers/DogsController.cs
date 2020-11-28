@@ -202,7 +202,7 @@ namespace WMAgility2.Controllers
             return _db.Dogs.Any(e => e.Id == id);
         }
 
-        [Authorize(Roles = "Super Admin, Team Admin, Member")]
+        [Authorize(Roles = "Super Admin, Admin, Member")]
         public ViewResult DogsList(int? id)
         {
             IEnumerable<Dog> dog;

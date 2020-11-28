@@ -1,8 +1,8 @@
-﻿@model IEnumerable<WMAgility2.Models.Practice>
+﻿@model IEnumerable<WMAgility2.Models.ViewModels.PracticeViewModel>
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
 <div id="chartContainer"></div>
+
 <script type="text/javascript">
-    $(document).ready(function () {
         var result = @Html.Raw(ViewBag.DataPoints);
         var dataPoints = [];
         var labelPoints = [];
@@ -10,34 +10,39 @@
             dataPoints.push({ label: result[i].DogName, label1: result[i].SkillName, x: result[i].Rounds, y: result[i].Score });
             labelPoints.push(result[i].SkillName);
         }
-
-        var chart = new CanvasJS.Chart("chartContainer", {
-            theme: "light2",
-            zoomEnabled: true,
-            animationEnabled: true,
-            title: {
-                text: "Column Chart with Data-Points from DataBase"
-            },
-            axisX: {
-                title: "Rounds"
-            },
-            axisY: {
-                title: "Score"
-            },
-            data: [
-                {
-                    type: "column",
-                    dataPoints: dataPoints
-                }],
-            options: {
-                scales: {
-                    yAxes: [{ticks: {mirror: true}}]
-                }
-            },
-            toolTip: {
-                content: "{label1}: {y}"
-            }
-        });
-        chart.render();
-    });
 </script>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                theme: "light2",
+                zoomEnabled: true,
+                animationEnabled: true,
+                title: {
+                    text: "Skill Tracker Chart"
+                },
+                axisX: {
+                    title: "Rounds"
+                },
+                axisY: {
+                    title: "Score"
+                },
+                data: [
+                    {
+                        type: "column",
+                        dataPoints: dataPoints
+                    }],
+                options: {
+                    scales: {
+                        yAxes: [{ ticks: { mirror: true } }]
+                    }
+                },
+                toolTip: {
+                    content: "{label1}: {y}"
+                }
+            });
+            chart.render();
+        });
+    </script>
+}

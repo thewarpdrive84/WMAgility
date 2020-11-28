@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
 using WMAgility2.Data;
 using WMAgility2.Models;
 using WMAgility2.Models.ViewModels;
@@ -44,7 +45,7 @@ namespace WMAgility2.Controllers
         {
             ViewData["GetCompDetails"] = CompSearch;
             var compquery = from x in _db.Competitions select x;
-            if(!string.IsNullOrEmpty(CompSearch))
+            if (!string.IsNullOrEmpty(CompSearch))
             {
                 compquery = compquery.Where(x => x.CompName.Contains(CompSearch));
             }
@@ -178,17 +179,18 @@ namespace WMAgility2.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Competitions.Find(id);
-            if (obj == null)
+            Competition comp = _db.Competitions.FirstOrDefault(u => u.CompId == id);
+
+            if (comp == null)
             {
                 return NotFound();
             }
 
-            return View(obj);
+            return View(comp);
         }
 
         //POST - DELETE
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? id)
         {
@@ -197,10 +199,17 @@ namespace WMAgility2.Controllers
             {
                 return NotFound();
             }
-
             _db.Competitions.Remove(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
+
+        }
+
+
+        //output PDF
+        public IActionResult CompetitionForm()
+        {
+            return new ViewAsPdf("CompetitionForm");
         }
     }
 }

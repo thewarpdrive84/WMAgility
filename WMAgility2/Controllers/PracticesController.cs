@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Rotativa.AspNetCore;
 using WMAgility2.Data;
 using WMAgility2.Models;
 using WMAgility2.Models.ViewModels;
@@ -51,12 +50,6 @@ namespace WMAgility2.Controllers
             pvm.Percentage = Math.Round(scores / (rounds * 10) * 100, 2);
 
             return View(pvm);
-        }
-
-        //output PDF
-        public IActionResult ReportPDF()
-        {
-            return new ViewAsPdf("ReportPDF");
         }
 
         // GET: Practices/Details/5
@@ -103,21 +96,19 @@ namespace WMAgility2.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             var currentUser = await _userManager.GetUserAsync(User);
 
-            List<PracticeSkill> pracSkills = new List<PracticeSkill>();
-
+            practice.ApplicationUserId = currentUser.Id;
             practice.Date = pvm.Date;
             practice.Rounds = pvm.Rounds;
             practice.Score = pvm.Score;
             practice.Notes = pvm.Notes;
-            practice.ApplicationUserId = pvm.ApplicationUserId;
             practice.DogId = pvm.DogId;
+            practice.SkillId = pvm.SkillId;
 
-            //int pracId = practice.PractId;
-
-            //foreach (var item in pvm.AllSkills)
+            //List<PracticeSkill> pracSkills = new List<PracticeSkill>();
+            //int pracId = practice.Id;
+            //foreach (var item in pvm.AvailableSkills)
             //{
-            //     pracSkills.Add(new PracticeSkill() { PractId = pracId, SkillId = item.Id });
-                
+            //    pracSkills.Add(new PracticeSkill() { PracticeId = pracId, SkillId = item.Key });
             //}
             //foreach (var item in pracSkills)
             //{
@@ -153,7 +144,7 @@ namespace WMAgility2.Controllers
         // POST: Practices/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PractId,Date,Rounds,Score,Notes,ApplicationUserId,DogId")] Practice practice)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,Rounds,Score,Notes,ApplicationUserId,DogId,SkillId")] Practice practice)
         {
             if (id != practice.Id)
             {
@@ -199,7 +190,6 @@ namespace WMAgility2.Controllers
             {
                 return NotFound();
             }
-
             return View(practice);
         }
 
@@ -219,10 +209,11 @@ namespace WMAgility2.Controllers
             return _db.Practices.Any(e => e.Id == id);
         }
 
+
         //for graph
         public async Task<IActionResult> DataFromDataBase()
         {
-            var practiceData = await (from a in _db.Practices.Include("Dog").Include("PracticeSkills")
+            var practiceData = await (from a in _db.Practices.Include("Dog").Include("Skill")
                                       join b in _db.Dogs on a.DogId equals b.Id
                                       select new PracticeViewModel()
                                       {
@@ -232,12 +223,40 @@ namespace WMAgility2.Controllers
                                           Date = a.Date,
                                           Notes = a.Notes,
                                           DogId = a.DogId,
-                                          PracticeSkill = a.PracticeSkills.FirstOrDefault(),
-                                          SkillName = a.PracticeSkills.FirstOrDefault().Skill.Name
+                                          SkillId = a.SkillId,
+                                          SkillName = a.Skill.Name
                                       }).OrderBy(x => x.DogId).ToListAsync();
 
             ViewBag.DataPoints = JsonConvert.SerializeObject(practiceData, _jsonSetting);
             return View();
         }
+
+        //public ActionResult DataFromDataBase1()
+        //{
+        //    ViewBag.DataPoints = JsonConvert.SerializeObject(_db.Practices.ToList(), _jsonSetting);
+        //    return View();
+        //}
+
+
+        ////for graph
+        //public async Task<IActionResult> DataFromDataBase()
+        //{
+        //    var practiceData = await (from a in _db.Practices.Include("Dog").Include("PracticeSkills")
+        //                              join b in _db.Dogs on a.DogId equals b.Id
+        //                              select new PracticeViewModel()
+        //                              {
+        //                                  Score = a.Score,
+        //                                  Rounds = a.Rounds,
+        //                                  DogName = a.Dog.DogName,
+        //                                  Date = a.Date,
+        //                                  Notes = a.Notes,
+        //                                  DogId = a.DogId,
+        //                                  PracticeSkill = a.PracticeSkills.FirstOrDefault(),
+        //                                  SkillName = a.PracticeSkills.FirstOrDefault().Skill.Name
+        //                              }).OrderBy(x => x.DogId).ToListAsync();
+
+        //    ViewBag.DataPoints = JsonConvert.SerializeObject(practiceData, _jsonSetting);
+        //    return View();
+        //}
     }
 }
