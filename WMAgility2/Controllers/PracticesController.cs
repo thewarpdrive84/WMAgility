@@ -104,17 +104,6 @@ namespace WMAgility2.Controllers
             practice.DogId = pvm.DogId;
             practice.SkillId = pvm.SkillId;
 
-            //List<PracticeSkill> pracSkills = new List<PracticeSkill>();
-            //int pracId = practice.Id;
-            //foreach (var item in pvm.AvailableSkills)
-            //{
-            //    pracSkills.Add(new PracticeSkill() { PracticeId = pracId, SkillId = item.Key });
-            //}
-            //foreach (var item in pracSkills)
-            //{
-            //    _db.PracticeSkills.Add(item);
-            //}
-
             pvm.AvailableDogs = _db.Dogs.Where(d => d.ApplicationUserId == currentUser.Id)
             .ToDictionary(x => x.Id, x => $"{ x.Id }({ x.DogName })");
             pvm.AvailableSkills = _db.Skills.ToDictionary(s => s.Id, s => $"{ s.Id }({ s.Name })");

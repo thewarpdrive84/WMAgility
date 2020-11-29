@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -22,13 +23,15 @@ namespace WMAgility2.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ISkillRepository _skillRepository;
         private readonly ILogger _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public SkillsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, ISkillRepository skillRepository, ILogger logger)
+        public SkillsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, ISkillRepository skillRepository, ILogger logger, UserManager<IdentityUser> userManager)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
             _skillRepository = skillRepository;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -226,8 +229,6 @@ namespace WMAgility2.Controllers
             {
                 _logger.LogDebug(LogEventIds.GetSkillIdNotFound, 
                     new Exception("Skill not found"), "Skill with id {0} not found", id);
-                //return NotFound();
-                //Catch this error using the exception filter
                 throw new SkillNotFoundException();
             }
 
@@ -247,6 +248,33 @@ namespace WMAgility2.Controllers
             }
 
             return View(new SkillViewModel() { Skill = skill });
+        }
+
+        public async Task<IActionResult> History(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            var skill = _skillRepository.GetSkillById(id);
+
+            var skillHistory = _db.Practices.Include(p => p.Dog).Where(s=> s.SkillId==id)
+                .Where(r => r.ApplicationUserId == currentUser.Id);
+
+            return View(new SkillHistoryViewModel(skillHistory) { Skill = skill });
+        }
+
+        [Route("[controller]/History/{id}")]
+        [HttpPost]
+        public async Task<IActionResult> HistoryPostAsync(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            var skill = _skillRepository.GetSkillById(id);
+
+            var skillHistory = _db.Practices.Include(p => p.Dog).Where(s => s.SkillId == id)
+                .Where(r => r.ApplicationUserId == currentUser.Id);
+            return View(new SkillHistoryViewModel(skillHistory) { Skill = skill });
         }
     }
 }
