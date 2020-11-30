@@ -1,48 +1,49 @@
 ﻿@model IEnumerable<WMAgility2.Models.ViewModels.PracticeViewModel>
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
 <div id="chartContainer"></div>
 
 <script type="text/javascript">
         var result = @Html.Raw(ViewBag.DataPoints);
         var dataPoints = [];
-        var labelPoints = [];
+
         for (var i = 0; i < result.length; i++) {
-            dataPoints.push({ label: result[i].DogName, label1: result[i].SkillName, x: result[i].Rounds, y: result[i].Score });
-            labelPoints.push(result[i].SkillName);
+            dataPoints.push({ label: result[i].Rounds, y: result[i].Score });
+
         }
 </script>
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            var chart = new CanvasJS.Chart("chartContainer", {
-                theme: "light2",
-                zoomEnabled: true,
-                animationEnabled: true,
-                title: {
-                    text: "Skill Tracker Chart"
-                },
-                axisX: {
-                    title: "Rounds"
-                },
-                axisY: {
-                    title: "Score"
-                },
-                data: [
-                    {
-                        type: "column",
-                        dataPoints: dataPoints
-                    }],
-                options: {
-                    scales: {
-                        yAxes: [{ ticks: { mirror: true } }]
-                    }
-                },
-                toolTip: {
-                    content: "{label1}: {y}"
-                }
-            });
-            chart.render();
-        });
+                $(document).ready(function () {
+                    var chart = new CanvasJS.Chart("chartContainer", {
+                        theme: "light2",
+                        zoomEnabled: true,
+                        animationEnabled: true,
+                        title: {
+                            text: "Skill Column Chart"
+                        },
+                        axisX: {
+                            title: "Rounds"
+                        },
+                        axisY: {
+                            title: "Score"
+                        },
+                        data: [
+                            {
+                                type: "column",
+                                dataPoints: dataPoints
+                            }],
+                        options: {
+                            scales: {
+                                yAxes: [{ ticks: { mirror: true } }]
+                            }
+                        },
+
+                    });
+                    chart.render();
+                });
     </script>
 }

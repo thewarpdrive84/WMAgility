@@ -49,6 +49,7 @@ namespace WMAgility2
             services.AddScoped<IDogRepository, DogRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<ICompRepository, CompRepository>();
+            services.AddScoped<IPracticeRepository, PracticeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddTransient<IMailService, SendGridMailService>(); // SendGridMail

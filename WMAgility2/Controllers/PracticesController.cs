@@ -40,18 +40,6 @@ namespace WMAgility2.Controllers
 
         }
 
-        //calculate success rate
-        public ActionResult CalcPercent()
-        {
-            PracticeViewModel pvm = new PracticeViewModel();
-
-            var rounds = _db.Practices.Where(r => r.Rounds > 0).Count(); ;
-            var scores = _db.Practices.Sum(s => s.Score);
-            pvm.Percentage = Math.Round(scores / (rounds * 10) * 100, 2);
-
-            return View(pvm);
-        }
-
         // GET: Practices/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -59,7 +47,6 @@ namespace WMAgility2.Controllers
             {
                 return NotFound();
             }
-
             var practice = await _db.Practices
                 .Include(p => p.Dog)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -67,7 +54,6 @@ namespace WMAgility2.Controllers
             {
                 return NotFound();
             }
-
             return View(practice);
         }
 
@@ -198,39 +184,10 @@ namespace WMAgility2.Controllers
             return _db.Practices.Any(e => e.Id == id);
         }
 
-
         //for graph
-        public async Task<IActionResult> DataFromDataBase()
-        {
-            var practiceData = await (from a in _db.Practices.Include("Dog").Include("Skill")
-                                      join b in _db.Dogs on a.DogId equals b.Id
-                                      select new PracticeViewModel()
-                                      {
-                                          Score = a.Score,
-                                          Rounds = a.Rounds,
-                                          DogName = a.Dog.DogName,
-                                          Date = a.Date,
-                                          Notes = a.Notes,
-                                          DogId = a.DogId,
-                                          SkillId = a.SkillId,
-                                          SkillName = a.Skill.Name
-                                      }).OrderBy(x => x.DogId).ToListAsync();
-
-            ViewBag.DataPoints = JsonConvert.SerializeObject(practiceData, _jsonSetting);
-            return View();
-        }
-
-        //public ActionResult DataFromDataBase1()
-        //{
-        //    ViewBag.DataPoints = JsonConvert.SerializeObject(_db.Practices.ToList(), _jsonSetting);
-        //    return View();
-        //}
-
-
-        ////for graph
         //public async Task<IActionResult> DataFromDataBase()
         //{
-        //    var practiceData = await (from a in _db.Practices.Include("Dog").Include("PracticeSkills")
+        //    var practiceData = await (from a in _db.Practices.Include("Dog").Include("Skill")
         //                              join b in _db.Dogs on a.DogId equals b.Id
         //                              select new PracticeViewModel()
         //                              {
@@ -240,12 +197,19 @@ namespace WMAgility2.Controllers
         //                                  Date = a.Date,
         //                                  Notes = a.Notes,
         //                                  DogId = a.DogId,
-        //                                  PracticeSkill = a.PracticeSkills.FirstOrDefault(),
-        //                                  SkillName = a.PracticeSkills.FirstOrDefault().Skill.Name
+        //                                  SkillId = a.SkillId,
+        //                                  SkillName = a.Skill.Name
         //                              }).OrderBy(x => x.DogId).ToListAsync();
 
         //    ViewBag.DataPoints = JsonConvert.SerializeObject(practiceData, _jsonSetting);
         //    return View();
         //}
+
+        //simplified alternative for graph
+        public ActionResult DataFromDataBase()
+        {
+            ViewBag.DataPoints = JsonConvert.SerializeObject(_db.Practices.ToList(), _jsonSetting);
+            return View();
+        }
     }
 }

@@ -22,14 +22,16 @@ namespace WMAgility2.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ISkillRepository _skillRepository;
+        private readonly IPracticeRepository _practiceRepository;
         private readonly ILogger _logger;
         private readonly UserManager<IdentityUser> _userManager;
-
-        public SkillsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, ISkillRepository skillRepository, ILogger logger, UserManager<IdentityUser> userManager)
+        
+        public SkillsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, ISkillRepository skillRepository, IPracticeRepository practiceRepository, ILogger logger, UserManager<IdentityUser> userManager)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
             _skillRepository = skillRepository;
+            _practiceRepository = practiceRepository;
             _logger = logger;
             _userManager = userManager;
         }
@@ -222,6 +224,7 @@ namespace WMAgility2.Controllers
             });
         }
 
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
             var skill = _skillRepository.GetSkillById(id);
@@ -235,6 +238,7 @@ namespace WMAgility2.Controllers
             return View(new SkillViewModel() { Skill = skill });
         }
 
+        [AllowAnonymous]
         [Route("[controller]/Details/{id}")]
         [HttpPost]
         public IActionResult DetailsPost(int id)
@@ -250,6 +254,7 @@ namespace WMAgility2.Controllers
             return View(new SkillViewModel() { Skill = skill });
         }
 
+        // view skill practice history
         public async Task<IActionResult> History(int id)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -257,24 +262,33 @@ namespace WMAgility2.Controllers
 
             var skill = _skillRepository.GetSkillById(id);
 
-            var skillHistory = _db.Practices.Include(p => p.Dog).Where(s=> s.SkillId==id)
-                .Where(r => r.ApplicationUserId == currentUser.Id);
+            var practices = await _practiceRepository.GetPracticeBySkillIdAsync(id);
 
-            return View(new SkillHistoryViewModel(skillHistory) { Skill = skill });
+            var skillHistory = _db.Practices.Where(x => x.Skill.Id == id)
+                .Where(r => r.ApplicationUserId == currentUser.Id).ToList();
+            ViewBag.Practices = skillHistory;
+
+            return View(new SkillHistoryViewModel(skillHistory) { Skill = skill});
         }
 
-        [Route("[controller]/History/{id}")]
-        [HttpPost]
-        public async Task<IActionResult> HistoryPostAsync(int id)
+        //calculate success rate *not working yet*
+        public async Task<ActionResult> CalcPercentAsync(int id)
         {
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Challenge();
 
             var skill = _skillRepository.GetSkillById(id);
 
-            var skillHistory = _db.Practices.Include(p => p.Dog).Where(s => s.SkillId == id)
-                .Where(r => r.ApplicationUserId == currentUser.Id);
-            return View(new SkillHistoryViewModel(skillHistory) { Skill = skill });
+            var skillHistory = _db.Practices.Where(x => x.Skill.Id == id)
+                .Where(r => r.ApplicationUserId == currentUser.Id).ToList();
+            SkillHistoryViewModel shvm = new SkillHistoryViewModel(skillHistory) { Skill = skill };
+
+            var rounds = _db.Practices.Where(r => r.Rounds > 0).Count();
+            var scores = _db.Practices.Sum(s => s.Score);
+
+            shvm.Percentage = Math.Round(scores / (rounds * 10) * 100, 2);
+
+            return View(shvm);
         }
     }
 }

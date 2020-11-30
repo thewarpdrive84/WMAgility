@@ -14,6 +14,7 @@ namespace WMAgility2.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Date { get; set; }
@@ -23,6 +24,7 @@ namespace WMAgility2.Models
         public double Rounds { get; set; }
 
         [Display(Name = "Score")]
+        [Range(0,10, ErrorMessage ="Must be between 0 and 10")]
         [JsonProperty]
         public double Score { get; set; }
 
@@ -38,10 +40,5 @@ namespace WMAgility2.Models
         public int SkillId { get; set; }
         [ForeignKey("SkillId")]
         public virtual Skill Skill { get; set; }
-
-        #region Navigation Properties
-        public virtual ICollection<PracticeSkill> PracticeSkills { get; set; }
-        #endregion
-
     }
 }

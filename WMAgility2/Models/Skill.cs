@@ -13,14 +13,11 @@ namespace WMAgility2.Models
         [Required]
         public string Name { get; set; }
 
-        [Display(Name="Type")] //check with Nikki
+        [Display(Name="Type")] 
         public string Description { get; set; }
 
         [Display(Name ="Irish Kennel Club Specifications")]
         public string IKC { get; set; }
         public string Image { get; set; }
-        #region Navigation Properties
-        public virtual ICollection<PracticeSkill> PracticeSkills { get; set; }
-        #endregion
     }
 }

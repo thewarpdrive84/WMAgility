@@ -3,7 +3,7 @@
 <div class="">
     <form method="post">
         <div class="container backgroundWhite pt-4">
-            <div class="card" style="border:1px solid #000000; ">
+            <div class="card" style="border:10px solid #5f0071; ">
                 <div class="card-header bg-dark text-light ml-0 row container" style="border-radius: 0px;">
                     <div class="col-12 col-md-6">
                         <h1 class="text-white">@Model.Skill.Name</h1>
@@ -14,50 +14,29 @@
                 </div>
                 <div class="card-body">
                     <div class="container rounded p-2">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Date)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Rounds)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Score)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Notes)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Dog)
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.shvm)
+                        <p>
+                            <h4><b>Practices:</b></h4>
+
+                            @if (ViewBag.Practices.Count > 0)
+                            {
+                                @foreach (var item in ViewBag.Practices)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Date)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Rounds)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Score)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Notes)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Dog.DogName)
-                                        </td>
-                                    </tr>
+                                    <div>Date: @item.Date </div>
+                                    <div>Score: @item.Score </div>
+                                    <div>Round: @item.Rounds </div>
+                                    <div>Notes: @item.Notes </div>
                                 }
-                            </tbody>
-                        </table>
+                            }
+                            else
+                            {
+                                <div>No @Html.DisplayNameFor(Model => Model.Practice) was found. </div>
+                            }
+                        </p>
+
+                        <p>
+                            Success Rate: @Html.Display("CalcPercentAsync", "Skills") %
+                        </p>
+
                     </div>
                 </div>
 
@@ -67,10 +46,10 @@
                             <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-square form-control btn-lg" style="height:50px;">Back</a>
                         </div>
                         <div class="col-12 col-md-5 ">
-                            <a asp-controller="Practices" asp-action="Create" asp-route-id="@Model.Skill.Id" class="btn btn-success btn-square form-control btn-lg" style="height:50px;">Practice Skill</a>
+                            <a asp-controller="Practices" asp-action="Create" asp-route-id="@Model.Skill.Id" class="btn btn-success btn-square form-control btn-lg" style="height:50px;">New Practice</a>
                         </div>
                         <div class="col-12 col-md-5 ">
-                            <a asp-controller="Practices" asp-action="Index" asp-route-id="@Model.Skill.Id" class="btn btn-success btn-square form-control btn-lg" style="height:50px;">Skill History</a>
+                            <a asp-controller="Practices" asp-action="DataFromDatabase" class="btn btn-success btn-square form-control btn-lg" style="height:50px;">View Graph</a>
                         </div>
                     </div>
                 </div>
