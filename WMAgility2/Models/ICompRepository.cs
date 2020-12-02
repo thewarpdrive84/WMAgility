@@ -9,5 +9,12 @@ namespace WMAgility2.Models
     {
         IEnumerable<Competition> AllComps { get; }
         Competition GetCompById(int Id);
+
+        //Unit Testing
+        Competition CreateComp(Competition comp);
+
+        Competition UpdateComp(Competition comp);
+
+        Competition DeleteComp(Competition comp);
     }
 }

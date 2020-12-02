@@ -184,7 +184,7 @@ namespace WMAgility2.Controllers
             return _db.Practices.Any(e => e.Id == id);
         }
 
-        //for graph
+        //for graph *NOT WORKING*
         //public async Task<IActionResult> DataFromDataBase()
         //{
         //    var practiceData = await (from a in _db.Practices.Include("Dog").Include("Skill")
@@ -205,10 +205,13 @@ namespace WMAgility2.Controllers
         //    return View();
         //}
 
-        //simplified alternative for graph
+        //simplified alternative for graph *working but not distiction between skills*
         public ActionResult DataFromDataBase()
         {
-            ViewBag.DataPoints = JsonConvert.SerializeObject(_db.Practices.ToList(), _jsonSetting);
+            var currentUser =  _userManager.GetUserId(User);
+            if (currentUser == null) return Challenge();
+
+            ViewBag.DataPoints = JsonConvert.SerializeObject(_db.Practices.Where(r => r.ApplicationUserId == currentUser).ToList(), _jsonSetting);
             return View();
         }
     }

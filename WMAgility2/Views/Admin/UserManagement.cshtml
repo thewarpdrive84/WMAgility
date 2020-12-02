@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 
-@model IEnumerable<WMAgility2.Models.ApplicationUser>
+@model IEnumerable<IdentityUser>
 
 <h2>User management</h2>
 
@@ -40,12 +40,4 @@ else
 
 <p>
     <a anchor-style="primary" asp-action="AddUser">Add new user</a>
-
-        @*@foreach (IdentityUser user in Model)
-        {
-            if (user.Email == Model.Email)
-            {
-                <a asp-controller="Admin" asp-action="sendGridEmail" asp-route-id="@Model.Email">Send Event Alert</a><span>&nbsp; &nbsp;&nbsp; &nbsp;</span>
-            }
-        }*@
-        </p>
+</p>

@@ -90,7 +90,7 @@ namespace WMAgility2.Controllers
             competition.Surface = (Surface)cfvm.Surface;
             competition.Placement = (Placement)cfvm.Placement;
             competition.Notes = cfvm.Notes;
-            competition.ApplicationUserId = userId; //check
+            competition.ApplicationUserId = userId; 
             competition.DogId = cfvm.DogId;
             _db.Competitions.Add(competition);
             _db.SaveChanges();
@@ -115,7 +115,7 @@ namespace WMAgility2.Controllers
             return RedirectToAction("Index", "Competitions");
         }
 
-        [Authorize(Roles = "Super Admin, Team Admin, Member")]
+        [Authorize(Roles = "Super Admin, Admin, Member")]
         public ViewResult CompList(int? id)
         {
             IEnumerable<Competition> comp;
@@ -204,7 +204,6 @@ namespace WMAgility2.Controllers
             return RedirectToAction("Index");
 
         }
-
 
         //output PDF
         public IActionResult CompetitionForm()
