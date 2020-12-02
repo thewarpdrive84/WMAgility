@@ -10,5 +10,12 @@ namespace WMAgility2.Models
         IEnumerable<Practice> AllPractices { get; }
         Practice GetPracticeById(int Id);
         Task<Practice> GetPracticeBySkillIdAsync(int? Id);
+
+        //Unit Testing
+        Practice CreatePractice(Practice practice);
+
+        Practice UpdatePractice(Practice practice);
+
+        Practice DeletePractice(Practice practice);
     }
 }

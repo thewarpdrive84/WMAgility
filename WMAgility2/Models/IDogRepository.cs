@@ -14,5 +14,10 @@ namespace WMAgility2.Models
 
         Dog GetDogById(int dogId);
 
+        Dog CreateDog(Dog dog);
+
+        Dog UpdateDog(Dog dog);
+
+        Dog DeleteDog(Dog dog);
     }
 }

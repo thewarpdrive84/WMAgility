@@ -34,7 +34,7 @@ namespace WMAgility2.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Challenge();
 
-            IEnumerable<Competition> compList = _db.Competitions.Where(c => c.ApplicationUserId == currentUser.Id);
+            IEnumerable<Competition> compList = _db.Competitions.Where(c => c.ApplicationUserId == currentUser.Id).Include(p => p.Dog).Include(p => p.CompFaults);
 
             return View(compList);
         }

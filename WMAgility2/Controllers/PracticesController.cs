@@ -35,7 +35,7 @@ namespace WMAgility2.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Challenge();
 
-            var applicationDbContext = _db.Practices.Include(p => p.Dog).Where(r => r.ApplicationUserId == currentUser.Id);
+            var applicationDbContext = _db.Practices.Include(p => p.Dog).Include(p => p.Skill).Where(r => r.ApplicationUserId == currentUser.Id);
             return View(await applicationDbContext.ToListAsync());
 
         }

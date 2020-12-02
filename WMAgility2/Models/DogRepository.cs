@@ -22,7 +22,6 @@ namespace WMAgility2.Models
             return db.Dogs.ToList();
         }
 
-
         public Dog GetDogById(int dogId)
         {
             return db.Dogs.FirstOrDefault(i => i.Id == dogId);

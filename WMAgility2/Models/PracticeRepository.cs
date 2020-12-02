@@ -30,7 +30,6 @@ namespace WMAgility2.Models
             return db.Practices.ToList();
         }
 
-
         public Practice GetPracticeById(int pracId)
         {
             return db.Practices.FirstOrDefault(i => i.Id == pracId);
@@ -52,7 +51,7 @@ namespace WMAgility2.Models
             return foundPractice;
         }
 
-        public Practice DeleteComp(Practice practice)
+        public Practice DeletePractice(Practice practice)
         {
             var foundPractice = db.Practices.FirstOrDefault(i => i.Id == practice.Id);
             db.Practices.Remove(foundPractice);

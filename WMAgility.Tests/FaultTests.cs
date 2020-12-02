@@ -1,10 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Xunit;
+using WMAgility2.Models;
 
 namespace WMAgility.Tests
 {
-    class FaultTests
+    public class FaultTests
     {
+        [Fact]
+        public void CanUpdateFaultName()
+        {
+            // Arrange
+            var fault = new Fault { Name = "Knocked Bar" };
+            // Act
+            fault.Name = "Knocked Pole";
+            //Assert
+            Assert.Equal("Knocked Pole", fault.Name);
+        }
     }
 }
