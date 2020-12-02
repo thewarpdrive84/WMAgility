@@ -146,7 +146,7 @@ namespace WMAgility.Tests
 
         private IPracticeRepository GetInMemoryPracticeRepository()
         {
-            var builder = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(databaseName: "WMDb").Options;
+            var builder = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(databaseName: "WM_db").Options;
             ApplicationDbContext applicationDataContext = new ApplicationDbContext(builder);
             applicationDataContext.Database.EnsureDeleted();
             applicationDataContext.Database.EnsureCreated();
