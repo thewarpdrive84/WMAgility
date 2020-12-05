@@ -74,17 +74,17 @@ namespace WMAgility2.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Faults.Find(id);
-            if (obj == null)
+            Fault fault = _db.Faults.FirstOrDefault(u => u.Id == id);
+
+            if (fault == null)
             {
                 return NotFound();
             }
-
-            return View(obj);
+            return View(fault);
         }
 
         //POST - DELETE
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? id)
         {
@@ -93,7 +93,6 @@ namespace WMAgility2.Controllers
             {
                 return NotFound();
             }
-
             _db.Faults.Remove(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
