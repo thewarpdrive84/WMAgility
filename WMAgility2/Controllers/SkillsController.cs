@@ -163,6 +163,7 @@ namespace WMAgility2.Controllers
             }
             return View(obj);
         }
+        
         [Authorize(Roles = "Super Admin, Admin")]
         //GET - DELETE
         public IActionResult Delete(int? id)
@@ -171,18 +172,18 @@ namespace WMAgility2.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Skills.Find(id);
-            if (obj == null)
+            Skill skill = _db.Skills.FirstOrDefault(u => u.Id == id);
+
+            if (skill == null)
             {
                 return NotFound();
             }
 
-            return View(obj);
+            return View(skill);
         }
-
         [Authorize(Roles = "Super Admin, Admin")]
         //POST - DELETE
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? id)
         {
@@ -192,9 +193,19 @@ namespace WMAgility2.Controllers
                 return NotFound();
             }
 
+            string upload = _webHostEnvironment.WebRootPath + WebConstants.ImagePath;
+
+            var oldFile = Path.Combine(upload, obj.Image);
+
+            if (System.IO.File.Exists(oldFile))
+            {
+                System.IO.File.Delete(oldFile);
+            }
+
             _db.Skills.Remove(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
+
         }
 
         [Authorize(Roles = "Super Admin, Admin, Member")]
