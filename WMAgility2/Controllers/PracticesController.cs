@@ -119,7 +119,7 @@ namespace WMAgility2.Controllers
         // POST: Practices/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,Rounds,Score,Notes,ApplicationUserId,DogId,SkillId")] Practice practice)
+        public async Task<IActionResult> Edit(int id, [Bind("PractId,Date,Rounds,Score,Notes,DogId")] Practice practice)
         {
             if (id != practice.Id)
             {

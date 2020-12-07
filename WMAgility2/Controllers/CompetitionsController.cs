@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Rotativa.AspNetCore;
 using WMAgility2.Data;
@@ -115,61 +116,55 @@ namespace WMAgility2.Controllers
             return RedirectToAction("Index", "Competitions");
         }
 
-        [Authorize(Roles = "Super Admin, Admin, Member")]
-        public ViewResult CompList(int? id)
-        {
-            IEnumerable<Competition> comp;
-            string currentComp;
-            int compId;
-
-            if (id == null)
-            {
-                comp = _compRepository.AllComps.OrderBy(s => s.CompId);
-                currentComp = "All Competitions";
-                compId = 1;
-            }
-            else
-            {
-                comp = _compRepository.AllComps.Where(s => s.CompId == id)
-                    .OrderBy(s => s.CompId);
-                currentComp = _compRepository.AllComps.FirstOrDefault(c => c.CompId == id)?.CompName;
-                compId = id.Value;
-            }
-            ViewData["CompAmount"] = comp.Count();
-            return View(new CompListViewModel
-            {
-                Competition = _compRepository.AllComps
-            });
-        }
-
-        //GET - EDIT
-        public IActionResult Edit(int? id)
+        // GET: Competitions/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var obj = _db.Competitions.Find(id);
-            if (obj == null)
+
+            var comp = await _db.Competitions.FindAsync(id);
+            if (comp == null)
             {
                 return NotFound();
             }
-
-            return View(obj);
+            ViewData["DogId"] = new SelectList(_db.Dogs, "Id", "DogName", comp.DogId);
+            return View(comp);
         }
 
-        //POST - EDIT
+        // POST: Competitions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Competition obj)
+        public async Task<IActionResult> Edit(int id, [Bind("CompId,CompName,Location,Date,Length,Surface,Placement,Notes,DogId")] Competition comp)
         {
+            if (id != comp.CompId)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                _db.Competitions.Update(obj);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    _db.Update(comp);
+                    await _db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CompetitionExists(comp.CompId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
-            return View(obj);
+            ViewData["DogId"] = new SelectList(_db.Dogs, "Id", "DogName", comp.DogId);
+            return View(comp);
         }
 
         //GET - DELETE
@@ -209,6 +204,39 @@ namespace WMAgility2.Controllers
         public IActionResult CompetitionForm()
         {
             return new ViewAsPdf("CompetitionForm");
+        }
+
+        private bool CompetitionExists(int id)
+        {
+            return _db.Competitions.Any(e => e.CompId == id);
+        }
+
+
+        [Authorize(Roles = "Super Admin, Admin, Member")]
+        public ViewResult CompList(int? id)
+        {
+            IEnumerable<Competition> comp;
+            string currentComp;
+            int compId;
+
+            if (id == null)
+            {
+                comp = _compRepository.AllComps.OrderBy(s => s.CompId);
+                currentComp = "All Competitions";
+                compId = 1;
+            }
+            else
+            {
+                comp = _compRepository.AllComps.Where(s => s.CompId == id)
+                    .OrderBy(s => s.CompId);
+                currentComp = _compRepository.AllComps.FirstOrDefault(c => c.CompId == id)?.CompName;
+                compId = id.Value;
+            }
+            ViewData["CompAmount"] = comp.Count();
+            return View(new CompListViewModel
+            {
+                Competition = _compRepository.AllComps
+            });
         }
     }
 }

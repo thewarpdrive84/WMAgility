@@ -1,10 +1,28 @@
-﻿@model WMAgility2.Models.Practice
+﻿@model WMAgility2.Models.ViewModels.PracticeViewModel
+
+@{
+    var availableDogsSelectListItems = Model.AvailableDogs
+        .Select(x => new SelectListItem
+        {
+            Text = x.Value.ToString(),
+            Value = x.Key.ToString()
+        });
+}
+
+@{
+    var allSkillsSelectListItems = Model.AvailableSkills
+        .Select(s => new SelectListItem
+        {
+            Text = s.Value.ToString(),
+            Value = s.Key.ToString()
+        });
+}
+
 
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 
 <h1>Edit</h1>
 
@@ -15,6 +33,26 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="DogId" class="control-label"></label>
+                <select class="form-control" asp-for="DogId"
+                        asp-items="availableDogsSelectListItems">
+                    <option value="">- select -</option>
+                </select>
+                <span class="form-text" asp-validation-for="DogId"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SkillId" class="control-label">Skill</label>
+                <select class="form-control" asp-for="SkillId"
+                        asp-items="allSkillsSelectListItems">
+                    <option value="">- select -</option>
+                </select>
+                <span class="form-text" asp-validation-for="SkillId"></span>
+            </div>
+
+
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
                 <input asp-for="Date" class="form-control" />
@@ -34,11 +72,6 @@
                 <label asp-for="Notes" class="control-label"></label>
                 <input asp-for="Notes" class="form-control" />
                 <span asp-validation-for="Notes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DogId" class="control-label"></label>
-                <select asp-for="DogId" class="form-control" asp-items="ViewBag.DogId"></select>
-                <span asp-validation-for="DogId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
